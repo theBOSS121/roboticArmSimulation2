@@ -85,9 +85,9 @@ public class Cuboid {
 			points[j].y += y;
 			points[j].z += z;	
 		}
-		this.rx = rx;
-		this.ry = ry;
-		this.rz = rz;
+		this.rx += rx;
+		this.ry += ry;
+		this.rz += rz;
 	}
 	
 	public void moveToOrigin() {

@@ -36,6 +36,7 @@ public class Arm {
 	
 	
 	public void update() {
+		rotate(0.02, 0.1, 0, 0, 0, 0);
 
 //		this will get displayed !!!
 		renderParts = new ArrayList<>();
@@ -71,6 +72,44 @@ public class Arm {
 		}		
 	}
 	
+	private void rotate(double r1, double r2, double r3, double r4, double r5, double r6) {
+		Point3d p;
+
+//		for rotating 2st joint (you should first rotate to 0.0 around y axis in order to rotate around x)
+//		for(int i = 2; i < parts.size(); i++) {
+//			for(int j = 0; j < parts.get(i).points.length; j++) {
+//				parts.get(i).points[j].x -= parts.get(2).x;
+//				parts.get(i).points[j].y -= parts.get(2).y;
+//				parts.get(i).points[j].z -= parts.get(2).z;	
+//				p = Renderer.rotateX(parts.get(i).points[j], r2);
+//				parts.get(i).points[j].x = p.x;
+//				parts.get(i).points[j].y = p.y;
+//				parts.get(i).points[j].z = p.z;		
+//				parts.get(i).points[j].x += parts.get(2).x;
+//				parts.get(i).points[j].y += parts.get(2).y;
+//				parts.get(i).points[j].z += parts.get(2).z;		
+//			}			
+//		}
+		
+//		for rotating 1st joint
+//		for(int i = 1; i < parts.size(); i++) {
+//			for(int j = 0; j < parts.get(i).points.length; j++) {
+//				parts.get(i).points[j].x -= parts.get(1).x;
+//				parts.get(i).points[j].y -= parts.get(1).y;
+//				parts.get(i).points[j].z -= parts.get(1).z;	
+//				p = Renderer.rotateY(parts.get(i).points[j], r1);
+//				parts.get(i).points[j].x = p.x;
+//				parts.get(i).points[j].y = p.y;
+//				parts.get(i).points[j].z = p.z;		
+//				parts.get(i).points[j].x += parts.get(1).x;
+//				parts.get(i).points[j].y += parts.get(1).y;
+//				parts.get(i).points[j].z += parts.get(1).z;		
+//			}			
+//		}
+	}
+
+
+
 	public void render() {
 		Point3d p, p2;
 		for(int i = 0; i < renderParts.size(); i++) {
