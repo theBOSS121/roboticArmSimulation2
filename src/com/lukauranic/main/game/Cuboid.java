@@ -63,17 +63,46 @@ public class Cuboid {
 		}
 	}
 	
+	public void rotate(double rx, double ry, double rz, double originX, double originY, double originZ, boolean changeRotationValues) {
+		Point3d p;	
+		for(int j = 0; j < points.length; j++) {
+			points[j].x -= originX;
+			points[j].y -= originY;
+			points[j].z -= originZ;	
+			p = Renderer.rotateX(points[j], rx);
+			points[j].x = p.x;
+			points[j].y = p.y;
+			points[j].z = p.z;					
+			p = Renderer.rotateY(points[j], ry);
+			points[j].x = p.x;
+			points[j].y = p.y;
+			points[j].z = p.z;						
+			p = Renderer.rotateZ(points[j], rz);
+			points[j].x = p.x;
+			points[j].y = p.y;
+			points[j].z = p.z;	
+			points[j].x += originX;
+			points[j].y += originY;
+			points[j].z += originZ;	
+		}
+		if(changeRotationValues) {
+			this.rx += rx;
+			this.ry += ry;
+			this.rz += rz;			
+		}
+	}
+	
 	public void rotate(double rx, double ry, double rz) {
 		Point3d p;	
 		for(int j = 0; j < points.length; j++) {
 			points[j].x -= x;
 			points[j].y -= y;
 			points[j].z -= z;	
-			p = Renderer.rotateY(points[j], rx);
+			p = Renderer.rotateX(points[j], rx);
 			points[j].x = p.x;
 			points[j].y = p.y;
 			points[j].z = p.z;					
-			p = Renderer.rotateX(points[j], ry);
+			p = Renderer.rotateY(points[j], ry);
 			points[j].x = p.x;
 			points[j].y = p.y;
 			points[j].z = p.z;						

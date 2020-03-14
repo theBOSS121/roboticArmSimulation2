@@ -1,9 +1,6 @@
 package com.lukauranic.main.game;
 
-import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import com.lukauranic.main.graphics.Renderer;
@@ -28,15 +25,21 @@ public class Arm {
 		parts.add(new Cuboid(baseX, baseY - 44, baseZ,  9, 6, 6));
 		parts.add(new Cuboid(baseX, baseY - 44, baseZ - 17 / 2 - 6 / 2,  6, 6, 17));
 		parts.add(new Cuboid(baseX, baseY - 44, baseZ - 17 - 6 / 2 - 4 / 2,  4, 4, 7));
-		
+		parts.add(new Cuboid(baseX, baseY - 44, baseZ - 26,  2, 2, 2));
 
+
+//		axis changes (joints will be rotated around those coordinates so in some cases that is not the middle)
+//		by default rotation will occur around the middle of the object; those changes are important some others are not
+		parts.get(5).z = baseZ - 20;		
+		parts.get(2).y = baseY - 18;		
 		parts.get(1).y += 10;
 	}
 	
 	
 	
 	public void update() {
-		rotate(0.02, 0.1, 0, 0, 0, 0);
+//		rotate(0.01, 0.005, 0.01, 0.01, 0.01, 0.01);
+//		rotate(0.001, 0.0005, -0.001, -0.001, 0.001, 0.01);
 
 //		this will get displayed !!!
 		renderParts = new ArrayList<>();
@@ -66,46 +69,101 @@ public class Arm {
 //				renderParts.get(i).points[j].z = p.z;	
 				renderParts.get(i).points[j].x += this.baseX;
 				renderParts.get(i).points[j].y += this.baseY - 25;
-				renderParts.get(i).points[j].z += this.baseZ;		
-				
-			}			
+				renderParts.get(i).points[j].z += this.baseZ;			
+			}		
 		}		
 	}
 	
 	private void rotate(double r1, double r2, double r3, double r4, double r5, double r6) {
-		Point3d p;
-
-//		for rotating 2st joint (you should first rotate to 0.0 around y axis in order to rotate around x)
-//		for(int i = 2; i < parts.size(); i++) {
-//			for(int j = 0; j < parts.get(i).points.length; j++) {
-//				parts.get(i).points[j].x -= parts.get(2).x;
-//				parts.get(i).points[j].y -= parts.get(2).y;
-//				parts.get(i).points[j].z -= parts.get(2).z;	
-//				p = Renderer.rotateX(parts.get(i).points[j], r2);
-//				parts.get(i).points[j].x = p.x;
-//				parts.get(i).points[j].y = p.y;
-//				parts.get(i).points[j].z = p.z;		
-//				parts.get(i).points[j].x += parts.get(2).x;
-//				parts.get(i).points[j].y += parts.get(2).y;
-//				parts.get(i).points[j].z += parts.get(2).z;		
-//			}			
-//		}
+//		Point3d p;
 		
+		for(int i = 1; i < parts.size(); i++) {
+			parts.get(i).rotate(0, -parts.get(1).ry, 0, parts.get(1).x, parts.get(1).y,  parts.get(1).z, false);
+		}		
+		for(int i = 1; i < parts.size(); i++) {			
+			parts.get(i).rotate(-parts.get(2).rx, 0, 0, parts.get(2).x, parts.get(2).y,  parts.get(2).z, false);
+		}		
+		for(int i = 1; i < parts.size(); i++) {			
+			parts.get(i).rotate(-parts.get(3).rx, 0, 0, parts.get(3).x, parts.get(3).y,  parts.get(3).z, false);
+		}		
+		for(int i = 1; i < parts.size(); i++) {			
+			parts.get(i).rotate(0, 0, -parts.get(4).rz, parts.get(4).x, parts.get(4).y,  parts.get(4).z, false);
+		}		
+		for(int i = 1; i < parts.size(); i++) {			
+			parts.get(i).rotate(-parts.get(5).rx, 0, 0, parts.get(5).x, parts.get(5).y,  parts.get(5).z, false);
+		}
+		
+		
+
+//		for rotating 6th joint		
+		for(int i = 6; i < parts.size(); i++) {	
+			if(i == 6) {
+				parts.get(i).rotate(0, 0, r6, parts.get(6).x, parts.get(6).y,  parts.get(6).z, true);					
+			}else {
+				parts.get(i).rotate(0, 0, r6, parts.get(6).x, parts.get(6).y,  parts.get(6).z, false);	
+			}
+		}
+		
+		for(int i = 1; i < parts.size(); i++) {			
+			parts.get(i).rotate(parts.get(5).rx, 0, 0, parts.get(5).x, parts.get(5).y,  parts.get(5).z, false);
+		}
+
+//		for rotating 5th joint		
+		for(int i = 5; i < parts.size(); i++) {	
+			if(i == 5) {
+				parts.get(i).rotate(r5, 0, 0, parts.get(5).x, parts.get(5).y,  parts.get(5).z, true);					
+			}else {
+				parts.get(i).rotate(r5, 0, 0, parts.get(5).x, parts.get(5).y,  parts.get(5).z, false);	
+			}
+		}
+		
+		for(int i = 1; i < parts.size(); i++) {			
+			parts.get(i).rotate(0, 0, parts.get(4).rz, parts.get(4).x, parts.get(4).y,  parts.get(4).z, false);
+		}
+//		for rotating 4th joint		
+		for(int i = 4; i < parts.size(); i++) {	
+			if(i == 4) {
+				parts.get(i).rotate(0, 0, r4, parts.get(4).x, parts.get(4).y,  parts.get(4).z, true);					
+			}else {
+				parts.get(i).rotate(0, 0, r4, parts.get(4).x, parts.get(4).y,  parts.get(4).z, false);	
+			}
+		}
+		
+		for(int i = 1; i < parts.size(); i++) {			
+			parts.get(i).rotate(parts.get(3).rx, 0, 0, parts.get(3).x, parts.get(3).y,  parts.get(3).z, false);
+		}	
+//		for rotating 3rd joint		
+		for(int i = 3; i < parts.size(); i++) {	
+			if(i == 3) {
+				parts.get(i).rotate(r3, 0, 0, parts.get(3).x, parts.get(3).y,  parts.get(3).z, true);	 
+			}else {
+				parts.get(i).rotate(r3, 0, 0, parts.get(3).x, parts.get(3).y,  parts.get(3).z, false);
+			}	
+		}
+		
+		for(int i = 1; i < parts.size(); i++) {			
+			parts.get(i).rotate(parts.get(2).rx, 0, 0, parts.get(2).x, parts.get(2).y,  parts.get(2).z, false);
+		}		
+//		for rotating 2nd joint		
+		for(int i = 2; i < parts.size(); i++) {		
+			if(i == 2) {
+				parts.get(i).rotate(r2, 0, 0, parts.get(2).x, parts.get(2).y,  parts.get(2).z, true);				
+			}else {
+				parts.get(i).rotate(r2, 0, 0, parts.get(2).x, parts.get(2).y,  parts.get(2).z, false);
+			}
+		}	
+		
+		for(int i = 1; i < parts.size(); i++) {
+			parts.get(i).rotate(0, parts.get(1).ry, 0, parts.get(1).x, parts.get(1).y,  parts.get(1).z, false);
+		}
 //		for rotating 1st joint
-//		for(int i = 1; i < parts.size(); i++) {
-//			for(int j = 0; j < parts.get(i).points.length; j++) {
-//				parts.get(i).points[j].x -= parts.get(1).x;
-//				parts.get(i).points[j].y -= parts.get(1).y;
-//				parts.get(i).points[j].z -= parts.get(1).z;	
-//				p = Renderer.rotateY(parts.get(i).points[j], r1);
-//				parts.get(i).points[j].x = p.x;
-//				parts.get(i).points[j].y = p.y;
-//				parts.get(i).points[j].z = p.z;		
-//				parts.get(i).points[j].x += parts.get(1).x;
-//				parts.get(i).points[j].y += parts.get(1).y;
-//				parts.get(i).points[j].z += parts.get(1).z;		
-//			}			
-//		}
+		for(int i = 1; i < parts.size(); i++) {
+			if(i == 1) {
+				parts.get(i).rotate(0, r1, 0, parts.get(1).x, parts.get(1).y,  parts.get(1).z, true);				
+			}else {
+				parts.get(i).rotate(0, r1, 0, parts.get(1).x, parts.get(1).y,  parts.get(1).z, false);
+			}
+		}
 	}
 
 
