@@ -1,5 +1,7 @@
 package com.lukauranic.main.game;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
@@ -128,17 +130,9 @@ public class Game {
 	}
 	
 	public void postRender(Graphics2D g) {
-//		g.setColor(Color.WHITE);
-//		g.setStroke(new BasicStroke());
-//		for(int i = 0; i < cube.connections.length; i++) {
-//			Point3d p = cube.points[cube.connections[i][0]];
-//			Point3d p2 = cube.points[cube.connections[i][1]];
-//			
-//			if(p.z <= 0 || p2.z <= 0) continue;
-//			Point3d pp = perspective(p);
-//			Point3d pp2 = perspective(p2);
-//			g.drawLine((int) pp.x, (int) pp.y, (int) pp2.x, (int) pp2.y);
-//		}	
+		g.setColor(Color.WHITE);
+		g.setStroke(new BasicStroke());
+		g.drawString("Joint rotation speed: " + ((int) (arm.rotSpeed * 1000) / 1000.0), 10, 10);
 	}
 }
 

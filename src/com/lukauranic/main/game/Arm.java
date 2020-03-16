@@ -1,9 +1,11 @@
 package com.lukauranic.main.game;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.lukauranic.main.graphics.Renderer;
+import com.lukauranic.main.input.Keyboard;
 
 public class Arm {
 	
@@ -13,7 +15,7 @@ public class Arm {
 	public int baseX, baseY, baseZ;
 	public double rx, ry, rz;
 	
-	public double rotSpeed = 0.1;
+	public double rotSpeed = 0.05;
 
 	public Arm(int baseX, int baseY, int baseZ) {
 		this.baseX = baseX;
@@ -36,10 +38,45 @@ public class Arm {
 	}
 	
 	
+	public void moveWithKeyboard() {
+		double jr1 = 0.0, jr2 = 0.0, jr3 = 0.0, jr4 = 0.0, jr5 = 0.0, jr6 = 0.0;
+		if(Keyboard.key(KeyEvent.VK_G)) {
+			if(rotSpeed > 0.01) rotSpeed -= 0.001;
+		}
+		if(Keyboard.key(KeyEvent.VK_F)) {
+			if(rotSpeed < 0.15) rotSpeed += 0.001;
+		}
+		if(Keyboard.key(KeyEvent.VK_1)) {
+			jr1 = rotSpeed;
+		}
+		if(Keyboard.key(KeyEvent.VK_2)) {
+			jr2 = rotSpeed;
+		}
+		if(Keyboard.key(KeyEvent.VK_3)) {
+			jr3 = rotSpeed;
+		}
+		if(Keyboard.key(KeyEvent.VK_4)) {
+			jr4 = rotSpeed;
+		}
+		if(Keyboard.key(KeyEvent.VK_5)) {
+			jr5 = rotSpeed;
+		}
+		if(Keyboard.key(KeyEvent.VK_6)) {
+			jr6 = rotSpeed;
+		}
+		if(Keyboard.key(KeyEvent.VK_SHIFT)) {
+			jr1 *= -1;
+			jr2 *= -1;
+			jr3 *= -1;
+			jr4 *= -1;
+			jr5 *= -1;
+			jr6 *= -1;
+		}
+		rotate(jr1, jr2, jr3, jr4, jr5, jr6);
+	}	
 	
 	public void update() {
-//		rotate(0.01, 0.005, 0.01, 0.01, 0.01, 0.01);
-//		rotate(0.001, 0.0005, -0.001, -0.001, 0.001, 0.01);
+		moveWithKeyboard();
 
 //		this will get displayed !!!
 		renderParts = new ArrayList<>();
