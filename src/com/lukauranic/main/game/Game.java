@@ -25,7 +25,7 @@ public class Game {
 		arm = new Arm(baseX, baseY, baseZ);
 	}
 	
-	public void moveArm() {
+	public void moveAroundTheArmWithKeyboard() {
 		if(Keyboard.key(KeyEvent.VK_A)) {
 			rotY = rotSpeed;
 		}
@@ -59,80 +59,26 @@ public class Game {
 		
 		arm.rx += rotX;
 		arm.ry += rotY;
-		arm.rz += rotZ;
-		
-//		joint5.moveToOrigin();
-//		Point3d p;
-//		for(int i = 0; i < joint5.points.length; i++) {			
-//			p = Renderer.rotateX(joint5.points[i], rotX);
-//			joint5.points[i].x = p.x;
-//			joint5.points[i].y = p.y;
-//			joint5.points[i].z = p.z;
-//			p = Renderer.rotateY(joint5.points[i], rotY);
-//			joint5.points[i].x = p.x;
-//			joint5.points[i].y = p.y;
-//			joint5.points[i].z = p.z;
-//			p = Renderer.rotateZ(joint5.points[i], rotZ);
-//			joint5.points[i].x = p.x;
-//			joint5.points[i].y = p.y;
-//			joint5.points[i].z = p.z;	
-//		}
-//		joint5.moveToPosition();
-//		joint5.rx += rotX;
-//		joint5.ry += rotY;
-//		joint5.rz += rotZ;
-//
-//
-//		joint5.moveToOrigin();
-//		if(Keyboard.key(KeyEvent.VK_A)) {
-//			joint5.x -= speed;
-//		}
-//		if(Keyboard.key(KeyEvent.VK_D)) {
-//			joint5.x += speed;			
-//		}
-//		if(Keyboard.key(KeyEvent.VK_W)) {
-//			joint5.y -= speed;
-//		}
-//		if(Keyboard.key(KeyEvent.VK_S)) {
-//			joint5.y += speed;		
-//		}
-//		if(Keyboard.key(KeyEvent.VK_UP)) {
-//			joint5.z += speed;
-//		}
-//		if(Keyboard.key(KeyEvent.VK_DOWN)) {
-//			joint5.z -= speed;		
-//		}
-//		joint5.moveToPosition();		
+		arm.rz += rotZ;	
 	}
 	
 	
 	
-	public void update() {	
-		
-		
-		
-		arm.update();
-		
-		moveArm();
-		
-
-		counter++;
+	public void update() {			
+		arm.update();		
+		moveAroundTheArmWithKeyboard();
 	}
 	
 	public void render() {
-		Renderer.renderBackground();		
-		
-		arm.render();
-		
+		Renderer.renderBackground();				
+		arm.render();		
 		for(int i = 0; i < Renderer.pixels.length; i++) {
 			MainClass.pixels[i] = Renderer.pixels[i];
 		}
 	}
 	
 	public void postRender(Graphics2D g) {
-		g.setColor(Color.WHITE);
-		g.setStroke(new BasicStroke());
-		g.drawString("Joint rotation speed: " + ((int) (arm.rotSpeed * 1000) / 1000.0), 10, 10);
+		arm.postRender(g);
 	}
 }
 

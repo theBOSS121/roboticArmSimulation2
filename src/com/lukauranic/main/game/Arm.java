@@ -1,18 +1,25 @@
 package com.lukauranic.main.game;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.lukauranic.main.graphics.Renderer;
 import com.lukauranic.main.input.Keyboard;
+import com.lukauranic.main.input.Mouse;
 
 public class Arm {
 	
 	public List<Cuboid> parts = new ArrayList<>();
 	public List<Cuboid> renderParts = new ArrayList<>(parts);
 
-	public int baseX, baseY, baseZ;
+	public int baseX, baseY, baseZ, targetX, targetY, targetZ;
 	public double rx, ry, rz;
 	
 	public double rotSpeed = 0.05;
@@ -77,6 +84,25 @@ public class Arm {
 	
 	public void update() {
 		moveWithKeyboard();
+		
+		
+		
+		targetX = Mouse.getX();
+		targetY = Mouse.getY();
+		targetZ = baseZ;
+		
+		
+//		rotate(0.01, 0, 0, 0, 0, 0);
+		
+//		double r1 = Math.atan2(targetZ - parts.get(6).z, targetX - parts.get(6).x) - Math.PI / 2;
+//		rotate(r1 / 100, 0, 0, 0, 0, 0);
+//		System.out.println(r1 + ", " + parts.get(1).ry);
+		
+		
+		
+		
+		
+		
 
 //		this will get displayed !!!
 		renderParts = new ArrayList<>();
@@ -111,9 +137,7 @@ public class Arm {
 		}		
 	}
 	
-	private void rotate(double r1, double r2, double r3, double r4, double r5, double r6) {
-//		Point3d p;
-		
+	private void rotate(double r1, double r2, double r3, double r4, double r5, double r6) {		
 		for(int i = 1; i < parts.size(); i++) {
 			parts.get(i).rotate(0, -parts.get(1).ry, 0, parts.get(1).x, parts.get(1).y,  parts.get(1).z, false);
 		}		
@@ -129,9 +153,6 @@ public class Arm {
 		for(int i = 1; i < parts.size(); i++) {			
 			parts.get(i).rotate(-parts.get(5).rx, 0, 0, parts.get(5).x, parts.get(5).y,  parts.get(5).z, false);
 		}
-		
-		
-
 //		for rotating 6th joint		
 		for(int i = 6; i < parts.size(); i++) {	
 			if(i == 6) {
@@ -139,12 +160,10 @@ public class Arm {
 			}else {
 				parts.get(i).rotate(0, 0, r6, parts.get(6).x, parts.get(6).y,  parts.get(6).z, false);	
 			}
-		}
-		
+		}		
 		for(int i = 1; i < parts.size(); i++) {			
 			parts.get(i).rotate(parts.get(5).rx, 0, 0, parts.get(5).x, parts.get(5).y,  parts.get(5).z, false);
 		}
-
 //		for rotating 5th joint		
 		for(int i = 5; i < parts.size(); i++) {	
 			if(i == 5) {
@@ -152,8 +171,7 @@ public class Arm {
 			}else {
 				parts.get(i).rotate(r5, 0, 0, parts.get(5).x, parts.get(5).y,  parts.get(5).z, false);	
 			}
-		}
-		
+		}		
 		for(int i = 1; i < parts.size(); i++) {			
 			parts.get(i).rotate(0, 0, parts.get(4).rz, parts.get(4).x, parts.get(4).y,  parts.get(4).z, false);
 		}
@@ -164,8 +182,7 @@ public class Arm {
 			}else {
 				parts.get(i).rotate(0, 0, r4, parts.get(4).x, parts.get(4).y,  parts.get(4).z, false);	
 			}
-		}
-		
+		}		
 		for(int i = 1; i < parts.size(); i++) {			
 			parts.get(i).rotate(parts.get(3).rx, 0, 0, parts.get(3).x, parts.get(3).y,  parts.get(3).z, false);
 		}	
@@ -176,8 +193,7 @@ public class Arm {
 			}else {
 				parts.get(i).rotate(r3, 0, 0, parts.get(3).x, parts.get(3).y,  parts.get(3).z, false);
 			}	
-		}
-		
+		}		
 		for(int i = 1; i < parts.size(); i++) {			
 			parts.get(i).rotate(parts.get(2).rx, 0, 0, parts.get(2).x, parts.get(2).y,  parts.get(2).z, false);
 		}		
@@ -188,8 +204,7 @@ public class Arm {
 			}else {
 				parts.get(i).rotate(r2, 0, 0, parts.get(2).x, parts.get(2).y,  parts.get(2).z, false);
 			}
-		}	
-		
+		}		
 		for(int i = 1; i < parts.size(); i++) {
 			parts.get(i).rotate(0, parts.get(1).ry, 0, parts.get(1).x, parts.get(1).y,  parts.get(1).z, false);
 		}
@@ -203,8 +218,6 @@ public class Arm {
 		}
 	}
 
-
-
 	public void render() {
 		Point3d p, p2;
 		for(int i = 0; i < renderParts.size(); i++) {
@@ -217,6 +230,18 @@ public class Arm {
 				Renderer.renderLine(p, p2);	
 			}	
 		}
+	}
+
+
+	public void postRender(Graphics2D g) {
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setFont(new Font("Verdana", 1, 14));
+		g.setColor(Color.WHITE);
+		g.setStroke(new BasicStroke());
+		g.drawString("Joint rotation speed: " + ((int) (rotSpeed * 1000) / 1000.0), 10, 20);
+		g.drawString("targetX = " + targetX, 10, 40);
+		g.drawString("targetY = " + targetY, 10, 60);
+		g.drawString("targetZ = " + targetZ, 10, 80);
 	}
 	
 }

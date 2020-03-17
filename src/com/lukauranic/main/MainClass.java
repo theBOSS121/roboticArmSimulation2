@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 
 import com.lukauranic.main.game.Game;
 import com.lukauranic.main.input.Keyboard;
+import com.lukauranic.main.input.Mouse;
 
 public class MainClass extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
@@ -22,6 +23,7 @@ public class MainClass extends Canvas implements Runnable {
 	public JFrame frame;
 	public Game game;	
 	public static Keyboard key;
+	public static Mouse mouse;
 	
 	public static BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	public static int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -33,6 +35,9 @@ public class MainClass extends Canvas implements Runnable {
 		game = new Game();
 		key = new Keyboard();
 		addKeyListener(key);
+		mouse = new Mouse();
+		addMouseListener(mouse);
+		addMouseMotionListener(mouse);
 	}
 	
 	public void start() {
@@ -83,6 +88,7 @@ public class MainClass extends Canvas implements Runnable {
 	public void update() {
 		game.update();
 		key.update();
+		mouse.update();
 	}
 	
 	public void render() {
