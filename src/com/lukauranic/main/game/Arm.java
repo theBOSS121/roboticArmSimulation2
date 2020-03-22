@@ -3,7 +3,6 @@ package com.lukauranic.main.game;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
@@ -12,7 +11,6 @@ import java.util.List;
 
 import com.lukauranic.main.graphics.Renderer;
 import com.lukauranic.main.input.Keyboard;
-import com.lukauranic.main.input.Mouse;
 
 public class Arm {
 	
@@ -35,6 +33,7 @@ public class Arm {
 		parts.add(new Cuboid(baseX, baseY - 44, baseZ - 17 / 2 - 6 / 2,  6, 6, 17));
 		parts.add(new Cuboid(baseX, baseY - 44, baseZ - 17 - 6 / 2 - 4 / 2,  4, 4, 7));
 		parts.add(new Cuboid(baseX, baseY - 44, baseZ - 26,  2, 2, 2));
+		
 
 
 //		axis changes (joints will be rotated around those coordinates so in some cases that is not the middle)
@@ -42,10 +41,15 @@ public class Arm {
 		parts.get(5).z = baseZ - 20;		
 		parts.get(2).y = baseY - 18;		
 		parts.get(1).y += 10;
+		
+		parts.get(1).rz = Math.PI / 2;
+		
+		rotate(-Math.PI / 2, 0, 0, 0, -Math.PI / 2, 0);
 	}
 	
 	
 	public void moveWithKeyboard() {
+//		seperate joints
 		double jr1 = 0.0, jr2 = 0.0, jr3 = 0.0, jr4 = 0.0, jr5 = 0.0, jr6 = 0.0;
 		if(Keyboard.key(KeyEvent.VK_G)) {
 			if(rotSpeed > 0.01) rotSpeed -= 0.001;
@@ -80,28 +84,87 @@ public class Arm {
 			jr6 *= -1;
 		}
 		rotate(jr1, jr2, jr3, jr4, jr5, jr6);
+		
+//		move target coordinates
+		if(Keyboard.key(KeyEvent.VK_UP)) {
+			targetY--;
+		}
+		if(Keyboard.key(KeyEvent.VK_DOWN)) {
+			targetY++;
+		}
+		if(Keyboard.key(KeyEvent.VK_LEFT)) {
+			targetX--;
+		}
+		if(Keyboard.key(KeyEvent.VK_RIGHT)) {
+			targetX++;
+		}
+		if(Keyboard.key(KeyEvent.VK_O)) {
+			targetZ--;
+		}
+		if(Keyboard.key(KeyEvent.VK_L)) {
+			targetZ++;
+		}
 	}	
 	
 	public void update() {
+		Point3d p;
 		moveWithKeyboard();
 		
+//		todo change this method to the one i used in the other simulation add start and end point to every joint
+//		targetX = baseX + 20;
+//		targetY = (int) (parts.get(2).y - 25);
+//		targetZ = baseZ + 25;
+		
+		double xDiff = targetX - baseX;
+		double yDiff = targetY - parts.get(2).y;
+		double zDiff = targetZ - baseZ;
 		
 		
-		targetX = Mouse.getX();
-		targetY = Mouse.getY();
-		targetZ = baseZ;
+		double dist = Math.sqrt(xDiff * xDiff + yDiff * yDiff + zDiff * zDiff);
+		if(dist == 0) dist = 0.001;
+		if(dist > 46) dist = 46;
+		if(dist < 6) dist = 6;
 		
+		double angle1Prefix = Math.atan2(yDiff, xDiff);
+		double angle2;
+		if(targetX >= baseX) {
+			angle2 = -Math.PI / 2 + Math.acos((dist * dist + 26 * 26 - 20 * 20) / (2 * dist * 26)) - angle1Prefix;			
+		}else {
+			angle2 = +Math.PI / 2 + Math.acos((dist * dist + 26 * 26 - 20 * 20) / (2 * dist * 26)) + angle1Prefix;						
+		}
+		double angle3 = -Math.PI / 2 + Math.acos((26 * 26 + 20 * 20 - dist * dist) / (2 * 26 * 20));
 		
-//		rotate(0.01, 0, 0, 0, 0, 0);
+		if(Math.abs(angle2 - parts.get(2).rx) > rotSpeed) {
+			if(angle2 > parts.get(2).rx) {
+				rotate(0, rotSpeed, 0, 0, 0, 0);
+			}else if(angle2 < parts.get(2).rx) {
+				rotate(0, -rotSpeed, 0, 0, 0, 0);			
+			}			
+		}else {
+			rotate(0, angle2 - parts.get(2).rx, 0, 0, 0, 0);			
+		}
+		if(Math.abs(angle3 - parts.get(3).rx) > rotSpeed) {
+			if(angle3 > parts.get(3).rx) {
+				rotate(0, 0, rotSpeed, 0, 0, 0);
+			}else if(angle3 < parts.get(3).rx) {
+				rotate(0, 0, -rotSpeed, 0, 0, 0);			
+			}			
+		}else {
+			rotate(0, 0, angle3 - parts.get(3).rx, 0, 0, 0);			
+		}
 		
-//		double r1 = Math.atan2(targetZ - parts.get(6).z, targetX - parts.get(6).x) - Math.PI / 2;
-//		rotate(r1 / 100, 0, 0, 0, 0, 0);
-//		System.out.println(r1 + ", " + parts.get(1).ry);
+
+		double angle1 = Math.atan2(xDiff, zDiff) - Math.PI;
 		
-		
-		
-		
-		
+		if(Math.abs(angle1 - parts.get(1).ry) > rotSpeed) {
+			if(angle1 > parts.get(1).ry) {
+				rotate(rotSpeed, 0, 0, 0, 0, 0);
+			}else if(angle1 < parts.get(1).ry) {
+				rotate(-rotSpeed, 0, 0, 0, 0, 0);			
+			}			
+		}else {
+			rotate(angle1 - parts.get(1).ry, 0, 0, 0, 0, 0);			
+		}
 		
 
 //		this will get displayed !!!
@@ -110,7 +173,6 @@ public class Arm {
 			renderParts.add(new Cuboid(parts.get(i)));
 		}
 		
-		Point3d p;
 //		for rendering and virtual rotation of the arm
 		for(int i = 0; i < renderParts.size(); i++) {
 			for(int j = 0; j < renderParts.get(i).points.length; j++) {
@@ -230,6 +292,7 @@ public class Arm {
 				Renderer.renderLine(p, p2);	
 			}	
 		}
+		
 	}
 
 
@@ -239,9 +302,12 @@ public class Arm {
 		g.setColor(Color.WHITE);
 		g.setStroke(new BasicStroke());
 		g.drawString("Joint rotation speed: " + ((int) (rotSpeed * 1000) / 1000.0), 10, 20);
-		g.drawString("targetX = " + targetX, 10, 40);
-		g.drawString("targetY = " + targetY, 10, 60);
-		g.drawString("targetZ = " + targetZ, 10, 80);
+		g.drawString("baseX = " + baseX, 10, 40);
+		g.drawString("baseY = " + baseY, 10, 60);
+		g.drawString("baseZ = " + baseZ, 10, 80);
+		g.drawString("targetX = " + targetX, 150, 40);
+		g.drawString("targetY = " + targetY, 150, 60);
+		g.drawString("targetZ = " + targetZ, 150, 80);
 	}
 	
 }
