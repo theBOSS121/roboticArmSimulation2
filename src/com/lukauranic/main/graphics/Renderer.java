@@ -134,7 +134,7 @@ public class Renderer {
 		}		
 	}
 //	two points in space also does perspective
-	public static void renderLine(Point3d p, Point3d p2) {
+	public static void renderLine(Point3d p, Point3d p2, int col) {
 		Point3d pp = perspective(p);
 		Point3d pp2 = perspective(p2);
 		int x1 = (int) pp.x;
@@ -159,7 +159,7 @@ public class Renderer {
 				if(x < 0 || (k * x + n) < 0) continue;
 				if(x >= width || (k * x + n) >= height) break;
 
-				pixels[x + (int) (k * x + n) * width] = 0xffffffff;
+				pixels[x + (int) (k * x + n) * width] = col;
 			}
 		}else {
 			if(y1 > y2) {
@@ -176,13 +176,13 @@ public class Renderer {
 				for(int y = y1; y < y2; y++) {
 					if(y < 0) continue;
 					if(x1 < 0 || x1 > width || y >= height) break;
-					pixels[x1 + y * width] = 0xffffffff;
+					pixels[x1 + y * width] = col;
 				}
 			}else {
 				for(int y = y1; y <= y2; y++) {
 					if(y < 0 || (y - n) / k < 0) continue;
 					if(y >= height || (y - n) / k >= height) break;
-					pixels[(int) ((y - n) / k) + y * width] = 0xffffffff;
+					pixels[(int) ((y - n) / k) + y * width] = col;
 				}				
 			}
 		}

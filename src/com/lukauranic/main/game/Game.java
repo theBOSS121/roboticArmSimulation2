@@ -25,48 +25,48 @@ public class Game {
 		arm = new Arm(baseX, baseY, baseZ);
 	}
 	
-	public void moveAroundTheArmWithKeyboard() {
-		if(Keyboard.key(KeyEvent.VK_A)) {
-			rotY = rotSpeed;
-		}
-		if(Keyboard.key(KeyEvent.VK_D)) {
-			rotY = -rotSpeed;			
-		}
-		if(Keyboard.key(KeyEvent.VK_D) && Keyboard.key(KeyEvent.VK_A) ||
-		!Keyboard.key(KeyEvent.VK_D) && !Keyboard.key(KeyEvent.VK_A)) {
-			rotY = 0.0;
-		}			
-		if(Keyboard.key(KeyEvent.VK_W)) {
-			rotX = rotSpeed;
-		}
-		if(Keyboard.key(KeyEvent.VK_S)) {
-			rotX = -rotSpeed;			
-		}
-		if(Keyboard.key(KeyEvent.VK_W) && Keyboard.key(KeyEvent.VK_S) ||
-		!Keyboard.key(KeyEvent.VK_W) && !Keyboard.key(KeyEvent.VK_S)) {
-			rotX = 0.0;
-		}
-		if(Keyboard.key(KeyEvent.VK_I)) {
-			rotZ = rotSpeed;
-		}
-		if(Keyboard.key(KeyEvent.VK_K)) {
-			rotZ = -rotSpeed;			
-		}
-		if(Keyboard.key(KeyEvent.VK_I) && Keyboard.key(KeyEvent.VK_K) ||
-		!Keyboard.key(KeyEvent.VK_I) && !Keyboard.key(KeyEvent.VK_K)) {
-			rotZ = 0.0;
-		}
-		
-		arm.rx += rotX;
-		arm.ry += rotY;
-		arm.rz += rotZ;	
-	}
+//	public void moveAroundTheArmWithKeyboard() {
+//		if(Keyboard.key(KeyEvent.VK_A)) {
+//			rotY = rotSpeed;
+//		}
+//		if(Keyboard.key(KeyEvent.VK_D)) {
+//			rotY = -rotSpeed;			
+//		}
+//		if(Keyboard.key(KeyEvent.VK_D) && Keyboard.key(KeyEvent.VK_A) ||
+//		!Keyboard.key(KeyEvent.VK_D) && !Keyboard.key(KeyEvent.VK_A)) {
+//			rotY = 0.0;
+//		}			
+//		if(Keyboard.key(KeyEvent.VK_W)) {
+//			rotX = rotSpeed;
+//		}
+//		if(Keyboard.key(KeyEvent.VK_S)) {
+//			rotX = -rotSpeed;			
+//		}
+//		if(Keyboard.key(KeyEvent.VK_W) && Keyboard.key(KeyEvent.VK_S) ||
+//		!Keyboard.key(KeyEvent.VK_W) && !Keyboard.key(KeyEvent.VK_S)) {
+//			rotX = 0.0;
+//		}
+//		if(Keyboard.key(KeyEvent.VK_I)) {
+//			rotZ = rotSpeed;
+//		}
+//		if(Keyboard.key(KeyEvent.VK_K)) {
+//			rotZ = -rotSpeed;			
+//		}
+//		if(Keyboard.key(KeyEvent.VK_I) && Keyboard.key(KeyEvent.VK_K) ||
+//		!Keyboard.key(KeyEvent.VK_I) && !Keyboard.key(KeyEvent.VK_K)) {
+//			rotZ = 0.0;
+//		}
+//		
+//		arm.rx += rotX;
+//		arm.ry += rotY;
+//		arm.rz += rotZ;	
+//	}
 	
 	
 	
 	public void update() {			
 		arm.update();		
-		moveAroundTheArmWithKeyboard();
+//		moveAroundTheArmWithKeyboard();
 	}
 	
 	public void render() {
