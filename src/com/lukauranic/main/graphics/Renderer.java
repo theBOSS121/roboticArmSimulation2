@@ -175,7 +175,7 @@ public class Renderer {
 			if(x2 - x1 == 0) {
 				for(int y = y1; y < y2; y++) {
 					if(y < 0) continue;
-					if(x1 < 0 || x1 > width || y >= height) break;
+					if(x1 < 0 || x1 >= width || y >= height) break;
 					pixels[x1 + y * width] = col;
 				}
 			}else {

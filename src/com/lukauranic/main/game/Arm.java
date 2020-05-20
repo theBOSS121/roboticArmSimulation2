@@ -40,7 +40,7 @@ public class Arm {
 		pc = new Point3d(baseX, baseY - 10, baseZ);
 		joints.add(new Joint(p, p2, new Cuboid(pc,  10, 20, 10)));
 
-		for(int i = 0; i < 3; i++) {
+		for(int i = 0; i < 4; i++) {
 			p = new Point3d(joints.get(joints.size() - 1).pos2);
 			p2 = new Point3d(p.x, p.y - 20, p.z);
 			pc.y -= 20;
@@ -89,17 +89,14 @@ public class Arm {
 		
 		
 		j = joints.get(joints.size() - 1);
-		j.moveRotationOrigin(j.pos1);
-		rotOrigin = j.pos1;
+		j.moveRotationOrigin(new Point3d(j.pos1));
+		rotOrigin = new Point3d(j.pos1);
 		
 		double xDiff = targetX - rotOrigin.x;
 		double zDiff = targetZ - rotOrigin.z;
 		double targetXZ = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
-		System.out.println(targetXZ);
-		System.out.println(targetY - rotOrigin.y);
 		
-//		something is wrong here
-		double rz = Math.atan2(targetY - rotOrigin.y, targetXZ) + Math.PI / 2;
+		double rz = Math.PI; // Math.atan2(targetXZ, rotOrigin.y - targetY);
 		j.rotate(0, 0, rz - j.rz, true);
 		
 
@@ -107,7 +104,8 @@ public class Arm {
 		zDiff = baseZ - targetZ;
 		targetXZ = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
 
-		j.movePos2(new Point3d(targetXZ + baseX, target.pos.y, 0));
+		j.movePos2(new Point3d(targetXZ + baseX, target.pos.y, target.pos.z));
+		
 
 		for(int i = joints.size() - 2; i >= 1; i--) {
 			j = joints.get(i);
